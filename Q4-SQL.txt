@@ -1,0 +1,14 @@
+Q4:What are the criterias of total amount paid by the customers each month? 
+If the total amount paid is less than 1000, then the criteria is stated as ‘low’, otherwise it is ‘high’.   
+
+SELECT date_month,sum_amnt,
+CASE WHEN sum_amnt<1000 THEN 'low'
+ELSE 'high' 
+END AS criteria
+FROM
+    (SELECT SUM(p.amount) sum_amnt,       DATE_TRUNC('month',r.rental_date) date_month
+    FROM rental r
+    JOIN payment p ON r.rental_id=p.rental_id
+    GROUP BY 2)sub
+GROUP BY 1,2
+ORDER BY 2;
