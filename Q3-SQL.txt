@@ -1,0 +1,13 @@
+Q3:In which quantile does the total amount paid by the customers, each month belong to? 
+Use the NTILE function to divide total amount paid by customers every month into 2 levels. 
+List the month, total amount paid and the respective quantile.
+
+SELECT rent_month,rent_amnt,standard_quant 
+FROM 
+    (SELECT DATE_TRUNC('month',r.rental_date) rent_month,SUM(p.amount) rent_amnt,
+    NTILE(2) OVER (ORDER BY SUM(p.amount)) AS standard_quant
+    FROM rental r
+    JOIN payment p ON r.rental_id=p.rental_id
+    GROUP BY 1)sub
+GROUP BY 1,2,3
+ORDER BY 1;
