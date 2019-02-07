@@ -1,0 +1,14 @@
+Q2:What are the total number of rentals for each movie with duration less than 1 hour?
+
+SELECT film_title, film_length,COUNT(rentid) cnt_rental 
+FROM 
+   (SELECT f.title AS film_title,
+    f.length AS film_length,
+    r.rental_id AS rentid
+    FROM film f
+    JOIN inventory i ON i.film_id=f.film_id
+    JOIN rental r ON r.inventory_id=i.inventory_id
+    GROUP BY 1,2,3
+    HAVING(f.length<60)
+    ORDER BY 2)sub
+GROUP BY 2,1;
